@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>LED Color Control</title>
+    <style>
+        .slider-container {
+            margin: 20px;
+        }
+
+        label {
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+    <h1>LED Color Control</h1>
+    <div class="slider-container">
+        <label for="red">Red: <span id="redValue">0</span></label>
+        <input type="range" id="red" min="0" max="255" value="0">
+    </div>
+    <div class="slider-container">
+        <label for="green">Green: <span id="greenValue">0</span></label>
+        <input type="range" id="green" min="0" max="255" value="0">
+    </div>
+    <div class="slider-container">
+        <label for="blue">Blue: <span id="blueValue">0</span></label>
+        <input type="range" id="blue" min="0" max="255" value="0">
+    </div>
+
+    <button id="submit">Submit</button>
+
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
+        import { getDatabase, ref, set } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-database.js";
+
+        const firebaseConfig = {
+            apiKey: "AIzaSyCABW6FNXOi2p5AC5zP2jJCSVDDrJHmSl8",
+            authDomain: "veldoom-dev.firebaseapp.com",
+            databaseURL: "https://veldoom-dev-default-rtdb.europe-west1.firebasedatabase.app",
+            projectId: "veldoom-dev",
+            storageBucket: "veldoom-dev.appspot.com",
+            messagingSenderId: "722825723470",
+            appId: "1:722825723470:web:72838e505626be249dcd1f",
+            measurementId: "G-ZSXGXFD2SS"
+        };
+
+        const app = initializeApp(firebaseConfig);
+        const db = getDatabase(app);
+        const ledRef = ref(db, 'LED');
+
+        const redSlider = document.getElementById('red');
+        const greenSlider = document.getElementById('green');
+        const blueSlider = document.getElementById('blue');
+
+        const redValue = document.getElementById('redValue');
+        const greenValue = document.getElementById('greenValue');
+        const blueValue = document.getElementById('blueValue');
+
+        // Update the span showing the current value of each slider
+        redSlider.addEventListener('input', () => {
+            redValue.textContent = redSlider.value;
+        });
+
+        greenSlider.addEventListener('input', () => {
+            greenValue.textContent = greenSlider.value;
+        });
+
+        blueSlider.addEventListener('input', () => {
+            blueValue.textContent = blueSlider.value;
+        });
+
+        document.getElementById('submit').addEventListener('click', async () => {
+            const r = redSlider.value;
+            const g = greenSlider.value;
+            const b = blueSlider.value;
+
+            const colorData = `${r}:${g}:${b}`;
+            try {
+                await set(ledRef, colorData);
+                alert(`LED color set to: R=${r}, G=${g}, B=${b}`);
+            } catch (error) {
+                console.error('Error updating color:', error);
+            }
+        });
+    </script>
+</body>
+</html>
