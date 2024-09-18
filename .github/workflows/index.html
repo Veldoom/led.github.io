@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>LED</title>
+</head>
+<body>
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
+        import { getAnalytics } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-analytics.js";
+        import { getDatabase, ref, set, get } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-database.js";
+
+        const firebaseConfig = {
+          apiKey: "AIzaSyCABW6FNXOi2p5AC5zP2jJCSVDDrJHmSl8",
+          authDomain: "veldoom-dev.firebaseapp.com",
+          databaseURL: "https://veldoom-dev-default-rtdb.europe-west1.firebasedatabase.app",
+          projectId: "veldoom-dev",
+          storageBucket: "veldoom-dev.appspot.com",
+          messagingSenderId: "722825723470",
+          appId: "1:722825723470:web:72838e505626be249dcd1f",
+          measurementId: "G-ZSXGXFD2SS"
+        };
+
+        const data = "255:0:0";
+
+        const app = initializeApp(firebaseConfig);
+        const analytics = getAnalytics(app);
+        const db = getDatabase(app);
+
+        const led_ref = ref(db, 'LED');
+
+        try {
+            await set(led_ref, data);
+        } catch (error) {
+            console.error("Error adding data: ", error);
+        }
+    </script>    
+</body>
+</html>
